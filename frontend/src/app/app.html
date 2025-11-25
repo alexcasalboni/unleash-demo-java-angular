@@ -1,0 +1,127 @@
+<div style="min-height: 100vh; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
+  <!-- Navigation Bar -->
+  <nav style="background-color: #1A4049; color: white; padding: 1rem 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+      <div style="display: flex; align-items: center; gap: 2rem;">
+        <h2 style="margin: 0; font-size: 1.5rem; font-weight: 600;">Unleash Demo</h2>
+        <div style="display: flex; gap: 1.5rem;">
+          <a routerLink="/" style="color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 4px; transition: background-color 0.3s; background-color: rgba(255,255,255,0.1);">Kill Switch</a>
+          <a routerLink="/ab-testing" style="color: rgba(255,255,255,0.7); text-decoration: none; padding: 0.5rem 1rem; border-radius: 4px; transition: background-color 0.3s;">A/B Testing</a>
+          <a routerLink="/gradual-rollout" style="color: rgba(255,255,255,0.7); text-decoration: none; padding: 0.5rem 1rem; border-radius: 4px; transition: background-color 0.3s;">Gradual Rollout</a>
+          <a routerLink="/settings" style="color: rgba(255,255,255,0.7); text-decoration: none; padding: 0.5rem 1rem; border-radius: 4px; transition: background-color 0.3s;">Settings</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div style="max-width: 1200px; margin: 0 auto; padding: 3rem 2rem;">
+    <!-- Page Title -->
+    <div style="text-align: center; margin-bottom: 3rem;">
+      <h1 style="font-size: 2.5rem; color: #1A4049; margin-bottom: 0.5rem; font-weight: 700;">
+        Unleash Demo ({{ useCase() }})
+      </h1>
+      <p style="color: #666; font-size: 1.1rem;">
+        Feature flag demonstration with Spring Boot backend and Angular frontend
+      </p>
+    </div>
+
+    <!-- Message Display -->
+    @if (message()) {
+      <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; margin-bottom: 2rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);">
+        <h2 style="margin-top: 0; font-size: 1.3rem; font-weight: 600;">
+          {{ killSwitchActive() ? 'Default Message (Graceful Degradation)' : 'Message from Spring Boot Backend' }}
+        </h2>
+        <p style="font-size: 2rem; font-weight: bold; margin: 1rem 0;">{{ message() }}</p>
+        <p style="font-size: 0.9rem; margin-bottom: 0; opacity: 0.9;">
+          @if (killSwitchActive()) {
+            <span>The "message_kill_switch" is active - showing default message without backend call</span>
+          } @else {
+            <span>This message is controlled by the "hello_name_message" feature flag in the backend</span>
+          }
+        </p>
+      </div>
+    }
+    
+    @if (error()) {
+      <div style="background-color: #f8d7da; color: #721c24; padding: 2rem; margin-bottom: 2rem; border-radius: 8px; border: 1px solid #f5c6cb; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <h2 style="margin-top: 0; font-size: 1.3rem;">Error</h2>
+        <p style="margin: 0;">{{ error() }}</p>
+        @if (!killSwitchActive()) {
+          <p style="font-size: 0.9rem; margin-top: 1rem; margin-bottom: 0;">Make sure your Spring Boot backend is running on port 8080</p>
+        }
+      </div>
+    }
+    
+    @if (!killSwitchActive()) {
+      <div style="text-align: center; margin-bottom: 3rem;">
+        <button (click)="loadTestMessage()" 
+                style="padding: 1rem 2rem; font-size: 1rem; cursor: pointer; background-color: #1A4049; color: white; border: none; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transition: transform 0.2s, box-shadow 0.2s; font-weight: 600;"
+                onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.3)'"
+                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.2)'">
+          Reload Message from Backend
+        </button>
+      </div>
+    }
+
+    <!-- Feature Flags Info Table -->
+    <div style="background-color: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-top: 4px solid #1A4049;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3 style="margin: 0; color: #1A4049; font-size: 1.5rem; font-weight: 600;">
+          Feature Flags Configuration
+        </h3>
+        <div style="padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem; font-weight: 600;"
+             [style.background-color]="killSwitchActive() ? '#d4edda' : '#e7f3ff'"
+             [style.color]="killSwitchActive() ? '#155724' : '#004085'">
+          Kill Switch: {{ killSwitchActive() ? 'ACTIVE' : 'INACTIVE' }}
+        </div>
+      </div>
+      
+      <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+        <thead>
+          <tr style="background-color: #1A4049; color: white;">
+            <th style="padding: 1rem; text-align: left; font-weight: 600; border-bottom: 2px solid #dee2e6;">Flag Name</th>
+            <th style="padding: 1rem; text-align: left; font-weight: 600; border-bottom: 2px solid #dee2e6;">Type</th>
+            <th style="padding: 1rem; text-align: left; font-weight: 600; border-bottom: 2px solid #dee2e6;">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid #dee2e6; transition: background-color 0.2s;"
+              onmouseover="this.style.backgroundColor='#f8f9fa'"
+              onmouseout="this.style.backgroundColor='white'">
+            <td style="padding: 1rem; font-family: 'Courier New', monospace; color: #1A4049; font-weight: 600;">
+              hello_name_message
+            </td>
+            <td style="padding: 1rem;">
+              <span style="background-color: #e7f3ff; color: #004085; padding: 0.3rem 0.8rem; border-radius: 12px; font-size: 0.85rem; font-weight: 600;">
+                Backend
+              </span>
+            </td>
+            <td style="padding: 1rem; color: #666;">
+              Controls the greeting message. Returns "Hello Allianz" when enabled, "hello world" when disabled
+            </td>
+          </tr>
+          <tr style="border-bottom: 1px solid #dee2e6; transition: background-color 0.2s;"
+              onmouseover="this.style.backgroundColor='#f8f9fa'"
+              onmouseout="this.style.backgroundColor='white'">
+            <td style="padding: 1rem; font-family: 'Courier New', monospace; color: #1A4049; font-weight: 600;">
+              message_kill_switch
+            </td>
+            <td style="padding: 1rem;">
+              <span style="background-color: #d4edda; color: #155724; padding: 0.3rem 0.8rem; border-radius: 12px; font-size: 0.85rem; font-weight: 600;">
+                Frontend
+              </span>
+            </td>
+            <td style="padding: 1rem; color: #666;">
+              Emergency kill switch. Shows default message without API call when enabled (graceful degradation)
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  <router-outlet />
+</div>
+
+

@@ -31,7 +31,7 @@ public class DemoApplication {
 		// Check if the feature flag is enabled
 		boolean isEnabled = unleash.isEnabled(unleashProperties.getFeature().getHelloNameMessage());
 		
-		String message = isEnabled ? "Hello Allianz" : "hello world";
+		String message = isEnabled ? "Hello Allianz!" : "Hello World!";
 		
 		return Map.of("message", message);
 	}

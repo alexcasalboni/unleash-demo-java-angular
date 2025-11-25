@@ -11,7 +11,7 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
 Copy the configuration template:
 
 ```bash
-cd src/app
+cd src/app/config
 cp unleash.config.example.ts unleash.config.ts
 ```
 
@@ -49,7 +49,7 @@ The application will be available at [http://localhost:4200](http://localhost:42
 
 ## Configuration
 
-The `unleash.config.ts` file contains:
+The `src/app/config/unleash.config.ts` file contains:
 - Unleash server URL
 - Client key (frontend API token)
 - App name
@@ -57,6 +57,25 @@ The `unleash.config.ts` file contains:
 - Feature flag names
 
 **⚠️ Security Note**: Never commit `unleash.config.ts` - it's excluded via `.gitignore`. Always use `unleash.config.example.ts` as a template.
+
+## Project Structure
+
+```
+src/app/
+├── components/          # UI Components
+│   ├── kill-switch.component.ts
+│   ├── ab-testing.component.ts
+│   ├── gradual-rollout.component.ts
+│   └── settings.component.ts
+├── services/           # Angular Services
+│   ├── api.service.ts
+│   └── unleash.service.ts
+├── config/            # Configuration
+│   ├── unleash.config.example.ts
+│   └── unleash.config.ts (gitignored)
+├── app.routes.ts
+└── app.ts
+```
 
 ## Feature Flags
 

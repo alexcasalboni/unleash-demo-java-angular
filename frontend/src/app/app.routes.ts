@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
-import { KillSwitchComponent } from './kill-switch.component';
-import { AbTestingComponent } from './ab-testing.component';
-import { GradualRolloutComponent } from './gradual-rollout.component';
-import { SettingsComponent } from './settings.component';
+import { KillSwitchComponent } from './components/kill-switch.component';
+import { AbTestingComponent } from './components/ab-testing.component';
+import { GradualRolloutComponent } from './components/gradual-rollout.component';
+import { SettingsComponent } from './components/settings.component';
 
 export const routes: Routes = [
   { path: '', component: KillSwitchComponent },

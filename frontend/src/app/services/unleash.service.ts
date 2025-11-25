@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { UnleashClient } from 'unleash-proxy-client';
-import { unleashConfig } from './unleash.config';
+import { unleashConfig } from '../config/unleash.config';
 
 @Injectable({
   providedIn: 'root'

@@ -1,9 +1,9 @@
 import { Component, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { ApiService } from './api.service';
-import { UnleashService } from './unleash.service';
-import { unleashConfig } from './unleash.config';
+import { ApiService } from '../services/api.service';
+import { UnleashService } from '../services/unleash.service';
+import { unleashConfig } from '../config/unleash.config';
 
 @Component({
   selector: 'app-kill-switch',
@@ -30,7 +30,7 @@ import { unleashConfig } from './unleash.config';
         <!-- Page Title -->
         <div class="text-center mb-12">
           <h1 class="text-4xl text-unleash mb-2 font-bold">
-            Unleash Demo ({{ useCase() }})
+            Unleash Demo (Kill Switch)
           </h1>
           <p class="text-gray-600 text-lg">
             Show a different welcome message based on two feature flags, involving both backend and frontend.
@@ -41,26 +41,18 @@ import { unleashConfig } from './unleash.config';
         @if (message()) {
           <div class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-8 mb-8 rounded-lg shadow-lg">
             <h2 class="mt-0 text-xl font-semibold">
-              {{ killSwitchActive() ? 'Default Message (Graceful Degradation)' : 'Message from API' }}
+              {{ killSwitchActive() || apiError() ? 'Default Message (Graceful Degradation)' : 'Message from API' }}
             </h2>
             <p class="text-3xl font-bold my-4">{{ message() }}</p>
             <p class="text-sm mb-0 opacity-90">
               @if (killSwitchActive()) {
-                <span>The "message_kill_switch" is active - showing default message without backend call</span>
+                <span>The "message_kill_switch" is active - showing default message without backend call.</span>
+              } @else if (apiError()) {
+                <span>There was an error connecting to the backend API - showing default message.</span>
               } @else {
-                <span>This message is controlled by the "hello_name_message" feature flag in the backend</span>
+                <span>This message is controlled by the "hello_name_message" feature flag in the backend.</span>
               }
             </p>
-          </div>
-        }
-        
-        @if (error()) {
-          <div class="bg-red-100 text-red-800 p-8 mb-8 rounded-lg border border-red-200 shadow-md">
-            <h2 class="mt-0 text-xl">Error</h2>
-            <p class="m-0">{{ error() }}</p>
-            @if (!killSwitchActive()) {
-              <p class="text-sm mt-4 mb-0">Make sure your Spring Boot backend is running on port 8080</p>
-            }
           </div>
         }
         
@@ -123,10 +115,9 @@ import { unleashConfig } from './unleash.config';
   standalone: true
 })
 export class KillSwitchComponent implements OnInit {
-  protected readonly useCase = signal('Kill Switch');
   message = signal<string>('');
-  error = signal<string>('');
   killSwitchActive = signal<boolean>(false);
+  apiError = signal<boolean>(false);
 
   constructor(
     private apiService: ApiService,
@@ -153,10 +144,8 @@ export class KillSwitchComponent implements OnInit {
     if (killSwitchEnabled) {
       // Kill switch is ON - show default message without calling API (graceful degradation)
       this.message.set('Default welcome message');
-      this.error.set('');
     } else {
       // Kill switch is OFF - load message from backend
-      this.error.set('');
       this.loadTestMessage();
     }
   }
@@ -170,11 +159,12 @@ export class KillSwitchComponent implements OnInit {
     this.apiService.getTestMessage().subscribe({
       next: (data) => {
         this.message.set(data.message);
-        this.error.set('');
       },
       error: (err) => {
-        this.error.set('Error connecting to backend: ' + err.message);
-        this.message.set('');
+        // API error - show graceful degradation message instead of error
+        console.error('Backend API error:', err);
+        this.message.set('Default welcome message');
+        this.apiError.set(true);
       }
     });
   }

@@ -49,7 +49,7 @@ unleash.api.token=your-actual-token-here
 Create the configuration file from the template:
 
 ```bash
-cd frontend/src/app
+cd frontend/src/app/config
 cp unleash.config.example.ts unleash.config.ts
 ```
 
@@ -128,12 +128,19 @@ demo/
 ├── frontend/
 │   └── src/
 │       └── app/
-│           ├── unleash.config.example.ts  # Configuration template
-│           ├── unleash.config.ts          # Your actual config (gitignored)
-│           ├── kill-switch.component.ts
-│           ├── ab-testing.component.ts
-│           ├── gradual-rollout.component.ts
-│           └── settings.component.ts
+│           ├── components/     # Angular components
+│           │   ├── kill-switch.component.ts
+│           │   ├── ab-testing.component.ts
+│           │   ├── gradual-rollout.component.ts
+│           │   └── settings.component.ts
+│           ├── services/       # Angular services
+│           │   ├── api.service.ts
+│           │   └── unleash.service.ts
+│           ├── config/         # Configuration files
+│           │   ├── unleash.config.example.ts  # Template (committed)
+│           │   └── unleash.config.ts          # Actual config (gitignored)
+│           ├── app.routes.ts
+│           └── app.ts
 └── README.md
 ```
 
@@ -152,4 +159,4 @@ When contributing, ensure you:
 
 ## License
 
-[Add your license here]
+Apache 2

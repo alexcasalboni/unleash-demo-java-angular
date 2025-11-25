@@ -44,8 +44,8 @@ src/main/resources/application-*.properties
 !src/main/resources/application.properties.example
 
 # Frontend secrets
-frontend/src/app/unleash.config.ts
-!frontend/src/app/unleash.config.example.ts
+frontend/src/app/config/unleash.config.ts
+!frontend/src/app/config/unleash.config.example.ts
 
 # Frontend build and dependencies
 frontend/node_modules/

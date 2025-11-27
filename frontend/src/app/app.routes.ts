@@ -1,12 +1,12 @@
 import { Routes } from '@angular/router';
+import { UiOnlyComponent } from './components/ui-only.component';
 import { KillSwitchComponent } from './components/kill-switch.component';
-import { AbTestingComponent } from './components/ab-testing.component';
-import { GradualRolloutComponent } from './components/gradual-rollout.component';
-import { SettingsComponent } from './components/settings.component';
+import { RecommendationsComponent } from './components/recommendations.component';
+import { PricingExperimentComponent } from './components/pricing-experiment.component';
 
 export const routes: Routes = [
-  { path: '', component: KillSwitchComponent },
-  { path: 'ab-testing', component: AbTestingComponent },
-  { path: 'gradual-rollout', component: GradualRolloutComponent },
-  { path: 'settings', component: SettingsComponent }
+  { path: '', component: UiOnlyComponent },
+  { path: 'kill-switch', component: KillSwitchComponent },
+  { path: 'recommendations', component: RecommendationsComponent },
+  { path: 'pricing-experiment', component: PricingExperimentComponent }
 ];

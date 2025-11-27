@@ -4,4 +4,3 @@ spring.application.name=demo
 unleash.api.url=https://YOUR_UNLEASH_INSTANCE_URL/api
 unleash.api.token=YOUR_UNLEASH_API_TOKEN_HERE
 unleash.app.name=demo
-unleash.feature.hello_name_message=hello_name_message

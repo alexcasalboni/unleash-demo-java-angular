@@ -1,109 +1,133 @@
 import { Component, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { NavigationComponent } from './navigation.component';
 import { ApiService } from '../services/api.service';
 import { UnleashService } from '../services/unleash.service';
-import { unleashConfig } from '../config/unleash.config';
 
 @Component({
   selector: 'app-kill-switch',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, NavigationComponent],
   template: `
-    <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200">
+    <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200 dark:from-gray-900 dark:to-gray-800 transition-colors">
       <!-- Navigation Bar -->
-      <nav class="bg-unleash text-white px-8 py-4 shadow-md">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-          <div class="flex items-center gap-8">
-            <h2 class="text-2xl font-semibold">Unleash Demo</h2>
-            <div class="flex gap-6">
-              <a routerLink="/" class="text-white no-underline px-4 py-2 rounded transition-colors bg-white/10 hover:bg-white/20">Kill Switch</a>
-              <a routerLink="/ab-testing" class="text-white/70 no-underline px-4 py-2 rounded transition-colors hover:bg-white/20">A/B Testing</a>
-              <a routerLink="/gradual-rollout" class="text-white/70 no-underline px-4 py-2 rounded transition-colors hover:bg-white/20">Gradual Rollout</a>
-              <a routerLink="/settings" class="text-white/70 no-underline px-4 py-2 rounded transition-colors hover:bg-white/20">Settings</a>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <app-navigation currentPage="kill-switch"></app-navigation>
 
       <!-- Main Content -->
       <div class="max-w-7xl mx-auto px-8 py-12">
         <!-- Page Title -->
         <div class="text-center mb-12">
-          <h1 class="text-4xl text-unleash mb-2 font-bold">
+          <h1 class="text-4xl text-unleash dark:text-blue-400 mb-2 font-bold transition-colors">
             Unleash Demo (Kill Switch)
           </h1>
-          <p class="text-gray-600 text-lg">
-            Show a different welcome message based on two feature flags, involving both backend and frontend.
+          <p class="text-gray-600 dark:text-gray-300 text-lg transition-colors">
+            Immediately disable a slow/risky feature using a kill switch
           </p>
         </div>
 
-        <!-- Message Display -->
-        @if (message()) {
-          <div class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-8 mb-8 rounded-lg shadow-lg">
-            <h2 class="mt-0 text-xl font-semibold">
-              {{ killSwitchActive() || apiError() ? 'Default Message (Graceful Degradation)' : 'Message from API' }}
-            </h2>
-            <p class="text-3xl font-bold my-4">{{ message() }}</p>
-            <p class="text-sm mb-0 opacity-90">
-              @if (killSwitchActive()) {
-                <span>The "message_kill_switch" is active - showing default message without backend call.</span>
-              } @else if (apiError()) {
-                <span>There was an error connecting to the backend API - showing default message.</span>
-              } @else {
-                <span>This message is controlled by the "hello_name_message" feature flag in the backend.</span>
+        <!-- Reports Feature Section -->
+        <div class="bg-white dark:bg-gray-800 p-8 mb-8 rounded-lg shadow-xl border-t-4 border-unleash dark:border-blue-500 transition-colors">
+          <h2 class="text-2xl text-unleash dark:text-blue-400 mb-4 font-semibold transition-colors">
+            📊 Reports Feature
+          </h2>
+          <p class="text-gray-600 dark:text-gray-300 mb-6 transition-colors">
+            This feature simulates a slow, resource-intensive operation that takes 5 seconds to complete.
+            Use the kill switch to disable it immediately if needed.
+          </p>
+
+          <!-- Kill Switch Active - Feature Disabled -->
+          @if (reportsKillSwitchActive()) {
+            <div class="bg-orange-50 dark:bg-orange-900/30 border-l-4 border-orange-500 p-6 rounded transition-colors">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="text-2xl">⚠️</span>
+                <h3 class="text-orange-800 dark:text-orange-300 font-semibold text-lg m-0 transition-colors">
+                  Feature Temporarily Unavailable
+                </h3>
+              </div>
+              <p class="text-orange-700 dark:text-orange-400 m-0 transition-colors">
+                The reports feature has been disabled via kill switch. This allows us to immediately stop a slow or problematic feature without redeploying.
+              </p>
+            </div>
+          }
+
+          <!-- Kill Switch Inactive - Feature Available -->
+          @if (!reportsKillSwitchActive()) {
+            <div class="space-y-4">
+              <button
+                (click)="generateReport()"
+                [disabled]="isGeneratingReport()"
+                class="bg-unleash dark:bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all">
+                @if (isGeneratingReport()) {
+                  <span class="flex items-center gap-2">
+                    <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Generating Report...
+                  </span>
+                } @else {
+                  Generate Report
+                }
+              </button>
+
+              @if (reportResult()) {
+                <div class="bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 p-4 rounded transition-colors">
+                  <p class="text-green-800 dark:text-green-300 m-0 transition-colors">
+                    <strong>Report Generated Successfully!</strong><br>
+                    The answer is: <span class="font-mono text-xl">{{ reportResult() }}</span>
+                  </p>
+                </div>
               }
-            </p>
-          </div>
-        }
+
+              @if (reportError()) {
+                <div class="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 p-4 rounded transition-colors">
+                  <p class="text-red-800 dark:text-red-300 m-0 transition-colors">
+                    <strong>❌ Error:</strong> {{ reportError() }}
+                  </p>
+                </div>
+              }
+            </div>
+          }
+        </div>
         
         <!-- Feature Flags Info Table -->
-        <div class="bg-white p-8 rounded-lg shadow-xl border-t-4 border-unleash">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-xl border-t-4 border-unleash dark:border-blue-500 transition-colors">
           <div class="flex justify-between items-center mb-6">
-            <h3 class="m-0 text-unleash text-2xl font-semibold">
+            <h3 class="m-0 text-unleash dark:text-blue-400 text-2xl font-semibold transition-colors">
               Feature Flags Configuration
             </h3>
             <div class="px-4 py-2 rounded-full text-sm font-semibold"
-                 [class.bg-green-100]="!killSwitchActive()"
-                 [class.text-green-800]="!killSwitchActive()"
-                 [class.bg-orange-100]="killSwitchActive()"
-                 [class.text-orange-800]="killSwitchActive()">
-              Kill Switch: {{ killSwitchActive() ? 'ACTIVE' : 'INACTIVE' }}
+                 [class.bg-green-100]="!reportsKillSwitchActive()"
+                 [class.text-green-800]="!reportsKillSwitchActive()"
+                 [class.bg-orange-100]="reportsKillSwitchActive()"
+                 [class.text-orange-800]="reportsKillSwitchActive()"
+                 [class.dark:bg-green-900]="!reportsKillSwitchActive()"
+                 [class.dark:text-green-200]="!reportsKillSwitchActive()"
+                 [class.dark:bg-orange-900]="reportsKillSwitchActive()"
+                 [class.dark:text-orange-200]="reportsKillSwitchActive()">
+              Kill Switch: {{ reportsKillSwitchActive() ? 'ACTIVE' : 'INACTIVE' }}
             </div>
           </div>
           
           <table class="w-full border-collapse mt-4">
             <thead>
-              <tr class="bg-unleash text-white">
-                <th class="p-4 text-left font-semibold border-b-2 border-gray-200">Flag Name</th>
-                <th class="p-4 text-left font-semibold border-b-2 border-gray-200">Type</th>
-                <th class="p-4 text-left font-semibold border-b-2 border-gray-200">Description</th>
+              <tr class="bg-unleash dark:bg-blue-600 text-white transition-colors">
+                <th class="p-4 text-left font-semibold border-b-2 border-gray-200 dark:border-gray-700">Flag Name</th>
+                <th class="p-4 text-left font-semibold border-b-2 border-gray-200 dark:border-gray-700">Type</th>
+                <th class="p-4 text-left font-semibold border-b-2 border-gray-200 dark:border-gray-700">Description</th>
               </tr>
             </thead>
             <tbody>
-              <tr class="border-b border-gray-200 transition-colors hover:bg-gray-50">
-                <td class="p-4 font-mono text-unleash font-semibold">
-                  hello_name_message
+              <tr class="border-b border-gray-200 dark:border-gray-700 transition-colors hover:bg-gray-50 dark:hover:bg-gray-700">
+                <td class="p-4 font-mono text-unleash dark:text-blue-400 font-semibold transition-colors">
+                  disable-slow-reports
                 </td>
                 <td class="p-4">
-                  <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-xl text-xs font-semibold">
-                    Backend
+                  <span class="bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 px-3 py-1 rounded-xl text-xs font-semibold transition-colors">
+                    Kill Switch
                   </span>
                 </td>
-                <td class="p-4 text-gray-600">
-                  Controls the greeting message. Returns "Hello Allianz" when enabled, "hello world" when disabled
-                </td>
-              </tr>
-              <tr class="border-b border-gray-200 transition-colors hover:bg-gray-50">
-                <td class="p-4 font-mono text-unleash font-semibold">
-                  message_kill_switch
-                </td>
-                <td class="p-4">
-                  <span class="bg-green-100 text-green-800 px-3 py-1 rounded-xl text-xs font-semibold">
-                    Frontend
-                  </span>
-                </td>
-                <td class="p-4 text-gray-600">
-                  Emergency kill switch. Shows default message without API call when enabled (graceful degradation)
+                <td class="p-4 text-gray-600 dark:text-gray-300 transition-colors">
+                  Emergency kill switch to immediately disable the slow reports feature (5 second API call)
                 </td>
               </tr>
             </tbody>
@@ -115,9 +139,10 @@ import { unleashConfig } from '../config/unleash.config';
   standalone: true
 })
 export class KillSwitchComponent implements OnInit {
-  message = signal<string>('');
-  killSwitchActive = signal<boolean>(false);
-  apiError = signal<boolean>(false);
+  reportsKillSwitchActive = signal<boolean>(false);
+  isGeneratingReport = signal<boolean>(false);
+  reportResult = signal<number | null>(null);
+  reportError = signal<string | null>(null);
 
   constructor(
     private apiService: ApiService,
@@ -138,34 +163,27 @@ export class KillSwitchComponent implements OnInit {
   }
 
   checkKillSwitch() {
-    const killSwitchEnabled = this.unleashService.isEnabled(unleashConfig.features.messageKillSwitch);
-    this.killSwitchActive.set(killSwitchEnabled);
-    
-    if (killSwitchEnabled) {
-      // Kill switch is ON - show default message without calling API (graceful degradation)
-      this.message.set('Default welcome message');
-    } else {
-      // Kill switch is OFF - load message from backend
-      this.loadTestMessage();
-    }
+    const killSwitchEnabled = this.unleashService.isEnabled('disable-slow-reports');
+    this.reportsKillSwitchActive.set(killSwitchEnabled);
   }
 
-  loadTestMessage() {
-    if (this.killSwitchActive()) {
-      // Don't make API call if kill switch is active
-      return;
-    }
+  generateReport() {
+    // Reset previous results
+    this.reportResult.set(null);
+    this.reportError.set(null);
+    this.isGeneratingReport.set(true);
 
-    this.apiService.getTestMessage().subscribe({
+    this.apiService.generateReport().subscribe({
       next: (data) => {
-        this.message.set(data.message);
+        this.isGeneratingReport.set(false);
+        this.reportResult.set(data.result);
       },
       error: (err) => {
-        // API error - show graceful degradation message instead of error
-        console.error('Backend API error:', err);
-        this.message.set('Default welcome message');
-        this.apiError.set(true);
+        this.isGeneratingReport.set(false);
+        this.reportError.set('Failed to generate report. Please try again.');
+        console.error('Report generation error:', err);
       }
     });
   }
 }
+

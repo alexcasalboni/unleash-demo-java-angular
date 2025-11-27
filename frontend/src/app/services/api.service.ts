@@ -13,4 +13,12 @@ export class ApiService {
   getTestMessage(): Observable<any> {
     return this.http.get(`${this.apiUrl}/test`);
   }
+
+  generateReport(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/api/reports`);
+  }
+
+  getRecommendations(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/api/recommendations`);
+  }
 }

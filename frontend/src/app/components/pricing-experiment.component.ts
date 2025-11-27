@@ -363,7 +363,47 @@ import { UnleashService } from '../services/unleash.service';
               </ul>
             </div>
           </div>
+          </div>
+
+
+        <!-- Feature Flags Configuration -->
+        <div class="bg-white dark:bg-gray-800 p-8 mb-8 rounded-lg shadow-xl border-t-4 border-unleash dark:border-blue-500 transition-colors">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="m-0 text-unleash dark:text-blue-400 text-2xl font-semibold transition-colors">
+              Feature Flags Configuration
+            </h3>
+          </div>
+          
+          <table class="w-full border-collapse mt-4">
+            <thead>
+              <tr class="bg-unleash dark:bg-blue-600 text-white transition-colors">
+                <th class="p-4 text-left font-semibold border-b-2 border-gray-200">Flag Name</th>
+                <th class="p-4 text-left font-semibold border-b-2 border-gray-200">Type</th>
+                <th class="p-4 text-left font-semibold border-b-2 border-gray-200">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-gray-200 dark:border-gray-700 transition-colors">
+                <td class="p-4 font-mono text-unleash dark:text-blue-400 font-semibold transition-colors">pricing-experiment</td>
+                <td class="p-4 text-gray-800 dark:text-gray-300 transition-colors">
+                  <span class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-3 py-1 rounded-xl text-xs font-semibold transition-colors">Experiment</span>
+
+                </td>
+                <td class="p-4 text-gray-800 dark:text-gray-300 transition-colors">
+                  A/B test with three variants (control, promo_v1, promo_v2) to optimize pricing page conversion. Uses context-based targeting to enable only for specific countries.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          
+          <!-- Info Message -->
+          <div class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-500 rounded transition-colors">
+            <p class="text-blue-700 dark:text-blue-300 m-0 transition-colors">
+              <strong>💡 Experiment with Variants & Context</strong> - This experiment uses variants to test different pricing layouts and context-based targeting to enable only for specific countries. The frontend provides user context (country), while Unleash handles all targeting logic.
+            </p>
+          </div>
         </div>
+
       </div>
   `,
   styles: [`

@@ -35,7 +35,9 @@ import { CommonModule } from '@angular/common';
             <tbody>
               <tr class="border-b border-gray-200 dark:border-gray-700 transition-colors">
                 <td class="p-4 text-gray-800 dark:text-gray-300 transition-colors">dark-mode</td>
-                <td class="p-4 text-gray-800 dark:text-gray-300 transition-colors">release</td>
+                <td class="p-4 text-gray-800 dark:text-gray-300 transition-colors">
+                  <span class="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-3 py-1 rounded-xl text-xs font-semibold transition-colors">Release</span>
+                </td>
                 <td class="p-4 text-gray-800 dark:text-gray-300 transition-colors">
                   Enables dark mode toggle in the UI for better user experience in low-light environments
                 </td>

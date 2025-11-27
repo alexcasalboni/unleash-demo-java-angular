@@ -1,12 +1,12 @@
-import { Component, Input, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { DarkModeService } from '../services/dark-mode.service';
 import { UnleashService } from '../services/unleash.service';
 
 @Component({
   selector: 'app-navigation',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, RouterLinkActive],
   template: `
     <nav class="bg-unleash dark:bg-gray-900 text-white px-8 py-4 shadow-md transition-colors">
       <div class="max-w-7xl mx-auto flex justify-between items-center">
@@ -15,22 +15,27 @@ import { UnleashService } from '../services/unleash.service';
           <div class="flex gap-6">
             <a 
               routerLink="/" 
-              [class]="currentPage === 'ui-only' ? 'text-white no-underline px-4 py-2 rounded transition-colors bg-white/10 hover:bg-white/20' : 'text-white/70 no-underline px-4 py-2 rounded transition-colors hover:bg-white/20'">
+              routerLinkActive="bg-white/10"
+              [routerLinkActiveOptions]="{exact: true}"
+              class="text-white no-underline px-4 py-2 rounded transition-colors hover:bg-white/20">
               UI-only
             </a>
             <a 
               routerLink="/kill-switch" 
-              [class]="currentPage === 'kill-switch' ? 'text-white no-underline px-4 py-2 rounded transition-colors bg-white/10 hover:bg-white/20' : 'text-white/70 no-underline px-4 py-2 rounded transition-colors hover:bg-white/20'">
+              routerLinkActive="bg-white/10"
+              class="text-white no-underline px-4 py-2 rounded transition-colors hover:bg-white/20">
               Kill Switch
             </a>
             <a 
               routerLink="/recommendations" 
-              [class]="currentPage === 'recommendations' ? 'text-white no-underline px-4 py-2 rounded transition-colors bg-white/10 hover:bg-white/20' : 'text-white/70 no-underline px-4 py-2 rounded transition-colors hover:bg-white/20'">
+              routerLinkActive="bg-white/10"
+              class="text-white no-underline px-4 py-2 rounded transition-colors hover:bg-white/20">
               Recommendations
             </a>
             <a 
               routerLink="/pricing-experiment" 
-              [class]="currentPage === 'pricing-experiment' ? 'text-white no-underline px-4 py-2 rounded transition-colors bg-white/10 hover:bg-white/20' : 'text-white/70 no-underline px-4 py-2 rounded transition-colors hover:bg-white/20'">
+              routerLinkActive="bg-white/10"
+              class="text-white no-underline px-4 py-2 rounded transition-colors hover:bg-white/20">
               Pricing Experiment
             </a>
           </div>
@@ -57,8 +62,6 @@ import { UnleashService } from '../services/unleash.service';
   standalone: true
 })
 export class NavigationComponent implements OnInit {
-  @Input() currentPage: 'ui-only' | 'kill-switch' | 'premium-chat' | 'recommendations' | 'pricing-experiment' = 'ui-only';
-  
   darkModeFeatureEnabled = signal(false);
   
   constructor(

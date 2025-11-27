@@ -1,23 +1,18 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NavigationComponent } from './navigation.component';
 import { FormsModule } from '@angular/forms';
 import { UnleashService } from '../services/unleash.service';
 
 @Component({
   selector: 'app-pricing-experiment',
-  imports: [CommonModule, NavigationComponent, FormsModule],
+  imports: [CommonModule, FormsModule],
   template: `
-    <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200 dark:from-gray-900 dark:to-gray-800 transition-colors">
-      <!-- Navigation Bar -->
-      <app-navigation currentPage="pricing-experiment"></app-navigation>
-
-      <div class="max-w-7xl mx-auto">
-        <!-- Header -->
-        <div class="text-center mb-12">
-          <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            Pricing Experiment (A/B Testing)
-          </h1>
+    <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+      <!-- Header -->
+      <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          Pricing Experiment (A/B Testing)
+        </h1>
           <p class="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
             A/B testing with variants and context-based targeting.
           </p>
@@ -370,7 +365,6 @@ import { UnleashService } from '../services/unleash.service';
           </div>
         </div>
       </div>
-    </div>
   `,
   styles: [`
     :host {
@@ -379,7 +373,7 @@ import { UnleashService } from '../services/unleash.service';
   `]
 })
 export class PricingExperimentComponent implements OnInit {
-  selectedCountry = signal<string>('US');
+  selectedCountry = signal<string>('IT');
   experimentEnabled = signal<boolean>(false);
   currentVariant = signal<string>('control');
 

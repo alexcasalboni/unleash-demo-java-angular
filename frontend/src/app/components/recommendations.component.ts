@@ -1,6 +1,5 @@
 import { Component, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NavigationComponent } from './navigation.component';
 import { ApiService } from '../services/api.service';
 import { UnleashService } from '../services/unleash.service';
 
@@ -12,22 +11,17 @@ interface Movie {
 
 @Component({
   selector: 'app-recommendations',
-  imports: [CommonModule, NavigationComponent],
+  imports: [CommonModule],
   template: `
-    <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200 dark:from-gray-900 dark:to-gray-800 transition-colors">
-      <!-- Navigation Bar -->
-      <app-navigation currentPage="recommendations"></app-navigation>
-
-      <!-- Main Content -->
-      <div class="max-w-7xl mx-auto px-8 py-12">
-        <!-- Page Title -->
-        <div class="text-center mb-12">
-          <h1 class="text-4xl text-unleash dark:text-blue-400 mb-2 font-bold transition-colors">
-            Unleash Demo (Recommendations)
-          </h1>
-          <p class="text-gray-600 dark:text-gray-300 text-lg transition-colors">
-            Personalized recommendations using feature flag variants
-          </p>
+    <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+      <!-- Page Title -->
+      <div class="text-center mb-12">
+        <h1 class="text-4xl text-unleash dark:text-blue-400 mb-2 font-bold transition-colors">
+          Unleash Demo (Recommendations)
+        </h1>
+        <p class="text-gray-600 dark:text-gray-300 text-lg transition-colors">
+          Personalized recommendations using feature flag variants
+        </p>
         </div>
 
         <!-- Best Practices Content -->
@@ -167,7 +161,6 @@ interface Movie {
           </table>
         </div>
       </div>
-    </div>
   `,
   standalone: true
 })

@@ -1,33 +1,27 @@
 import { Component, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NavigationComponent } from './navigation.component';
 import { ApiService } from '../services/api.service';
 import { UnleashService } from '../services/unleash.service';
 
 @Component({
   selector: 'app-kill-switch',
-  imports: [CommonModule, NavigationComponent],
+  imports: [CommonModule],
   template: `
-    <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200 dark:from-gray-900 dark:to-gray-800 transition-colors">
-      <!-- Navigation Bar -->
-      <app-navigation currentPage="kill-switch"></app-navigation>
+    <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+      <!-- Page Title -->
+      <div class="text-center mb-12">
+        <h1 class="text-4xl text-unleash dark:text-blue-400 mb-2 font-bold transition-colors">
+          Unleash Demo (Kill Switch)
+        </h1>
+        <p class="text-gray-600 dark:text-gray-300 text-lg transition-colors">
+          Immediately disable a slow/risky feature using a kill switch
+        </p>
+      </div>
 
-      <!-- Main Content -->
-      <div class="max-w-7xl mx-auto px-8 py-12">
-        <!-- Page Title -->
-        <div class="text-center mb-12">
-          <h1 class="text-4xl text-unleash dark:text-blue-400 mb-2 font-bold transition-colors">
-            Unleash Demo (Kill Switch)
-          </h1>
-          <p class="text-gray-600 dark:text-gray-300 text-lg transition-colors">
-            Immediately disable a slow/risky feature using a kill switch
-          </p>
-        </div>
-
-        <!-- Reports Feature Section -->
-        <div class="bg-white dark:bg-gray-800 p-8 mb-8 rounded-lg shadow-xl border-t-4 border-unleash dark:border-blue-500 transition-colors">
-          <h2 class="text-2xl text-unleash dark:text-blue-400 mb-4 font-semibold transition-colors">
-            📊 Reports Feature
+      <!-- Reports Feature Section -->
+      <div class="bg-white dark:bg-gray-800 p-8 mb-8 rounded-lg shadow-xl border-t-4 border-unleash dark:border-blue-500 transition-colors">
+        <h2 class="text-2xl text-unleash dark:text-blue-400 mb-4 font-semibold transition-colors">
+          📊 Reports Feature
           </h2>
           <p class="text-gray-600 dark:text-gray-300 mb-6 transition-colors">
             This feature simulates a slow, resource-intensive operation that takes 5 seconds to complete.
@@ -134,7 +128,6 @@ import { UnleashService } from '../services/unleash.service';
           </table>
         </div>
       </div>
-    </div>
   `,
   standalone: true
 })

@@ -1,6 +1,7 @@
 package io.getunleash.demo;
 
 import io.getunleash.Unleash;
+import io.getunleash.UnleashContext;
 import io.getunleash.Variant;
 import io.getunleash.demo.model.Movie;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -28,9 +30,14 @@ public class DemoApplication {
 	}
 
 	@GetMapping("/api/reports")
-	public Map<String, Object> generateReport() throws InterruptedException {
+	public Map<String, Object> generateReport(
+		@RequestHeader(value = "X-Unleash-User-Id", required = false) String userId
+	) throws InterruptedException {
+		// Build Unleash context with userId from the frontend
+		UnleashContext context = buildContext(userId);
+
 		// Check kill switch - if enabled, return immediately without slow operation
-		boolean killSwitchActive = unleash.isEnabled("disable-slow-reports");
+		boolean killSwitchActive = unleash.isEnabled("disable-slow-reports", context);
 		
 		if (killSwitchActive) {
 			// Kill switch is active - return immediately without sleeping
@@ -48,9 +55,14 @@ public class DemoApplication {
 	}
 
 	@GetMapping("/api/recommendations")
-	public Map<String, Object> getRecommendations() {
-		// Get the variant for movie-recommendations feature flag
-		Variant variant = unleash.getVariant("movie-recommendations");
+	public Map<String, Object> getRecommendations(
+		@RequestHeader(value = "X-Unleash-User-Id", required = false) String userId
+	) {
+		// Build Unleash context with userId from the frontend
+		UnleashContext context = buildContext(userId);
+
+		// Get the variant for movie-recommendations feature flag WITH the userId context
+		Variant variant = unleash.getVariant("movie-recommendations", context);
 		
 		// Check if the feature is enabled
 		if (!variant.isEnabled()) {
@@ -79,6 +91,21 @@ public class DemoApplication {
 		);
 	}
 	
+	/**
+	 * Builds an UnleashContext with userId from the frontend.
+	 * This ensures consistent context usage across all endpoints.
+	 *
+	 * @param userId the user ID from X-Unleash-User-Id header
+	 * @return UnleashContext with userId set if provided
+	 */
+	private UnleashContext buildContext(String userId) {
+		UnleashContext.Builder contextBuilder = UnleashContext.builder();
+		if (userId != null && !userId.isEmpty()) {
+			contextBuilder.userId(userId);
+		}
+		return contextBuilder.build();
+	}
+
 	/**
 	 * Simulates fetching recommendations from a simple recommendation service.
 	 * In a real application, this would query a database using JPA/Hibernate.

@@ -73,6 +73,8 @@ cd frontend
 npm install
 ```
 
+> **For more frontend-specific details**, see the [Frontend README](https://github.com/Unleash/demo-java-angular/tree/main/frontend)
+
 ## Running the Application
 
 ### Start the Backend Server
@@ -152,12 +154,12 @@ A/B testing with three variants and context-based targeting.
 
 **Feature Flag**: `pricing-experiment`
 - **Type**: Experiment
-- **Variants**: 
+- **Variants**:
   - `control` (30%): Standard pricing layout
   - `promo_v1` (35%): Discount banner with promotional messaging
   - `promo_v2` (35%): Emphasized yearly plan with "Best Value" badge
 - **Context Targeting**: Only enabled for specific countries (UK and US)
-- **Features**: 
+- **Features**:
   - Dynamic country selector to test different contexts
   - User simulation to see different variant assignments
   - Real-time variant display in configuration panel

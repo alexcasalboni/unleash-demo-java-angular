@@ -17,11 +17,13 @@ cd src/app/config
 cp unleash.config.example.ts unleash.config.ts
 ```
 
-Edit `unleash.config.ts` and add your Unleash client key:
+Edit `unleash.config.ts` and configure your Unleash frontend key and instance URL:
 
 ```typescript
-clientKey: 'your-actual-client-key-here',
+  url: 'https://YOUR_UNLEASH_INSTANCE_URL/api/frontend',
+  clientKey: 'YOUR_UNLEASH_CLIENT_KEY_HERE',
 ```
+
 
 **Where to find your client key:**
 1. Log in to [Unleash](https://app.unleash-hosted.com/)
@@ -64,32 +66,71 @@ The `src/app/config/unleash.config.ts` file contains:
 
 The application includes four interactive pages demonstrating different feature flag patterns:
 
-### 1. Kill Switch (`/kill-switch`)
-- **Flag**: `disable-slow-reports`
-- Demonstrates emergency circuit breaker pattern
-- Shows graceful degradation when backend operations are slow
-- Displays cache indicator when kill switch is active
+### 1. UI-Only Feature (`/ui-only`)
 
-### 2. Pricing Experiment (`/pricing-experiment`)
-- **Flag**: `pricing-experiment`
-- A/B test with 3 variants: control, promo_v1, promo_v2
-- Context-based targeting by country
-- Interactive country selector and user simulation
-- Real-time variant display
+Client-side only feature flag demonstration.
+
+**Feature Flag**: `dark-mode`
+- **Type**: Release toggle
+- **Use Case**: Frontend-only feature without backend dependency
+- **Features**:
+  - Toggle between light and dark themes
+  - Persistent preference in localStorage
+  - No backend API calls required
+  - Demonstrates pure client-side feature control
+
+### 2. Kill Switch (`/kill-switch`)
+
+Demonstrates graceful degradation when services are experiencing issues.
+
+**Feature Flag**: `disable-slow-reports`
+- **Type**: Kill switch
+- **Use Case**: Emergency circuit breaker to disable slow report generation
+- **Backend**: Bypasses slow processing and returns cached results when enabled
+- **Frontend**: Shows cache indicator when kill switch is active
 
 ### 3. Recommendations (`/recommendations`)
-- **Flag**: `movie-recommendations`
-- Compares simple vs ML-based recommendation algorithms
-- Netflix-style movie carousel with auto-scrolling animation
-- Real movie data with TMDB posters and IMDb IDs
-- Includes 11 best practices from Unleash documentation
-- Click tracking for conversion metrics
 
-### 4. UI-Only Feature (`/ui-only`)
-- **Flag**: `dark-mode`
-- Pure client-side feature flag (no backend)
-- Theme toggle with persistent preference
-- Demonstrates frontend-only feature control
+Personalized movie recommendations using A/B testing to compare algorithms.
+
+**Feature Flag**: `movie-recommendations`
+- **Type**: Experiment
+- **Variants**:
+  - `v1-simple`: Basic recommendation algorithm (10 popular movies)
+  - `v2-ml`: ML-based recommendation algorithm (10 personalized movies)
+- **Features**:
+  - Movie carousel with TMDB poster images
+  - Real movie data with IMDb IDs, ratings, and years
+- **Backend**: Different movie datasets per variant with unique IMDb IDs
+- **Frontend**: Loads recommendations only when flag is enabled
+
+
+### 4. Pricing Experiment (`/pricing-experiment`)
+
+A/B testing with three variants and context-based targeting.
+
+**Feature Flag**: `pricing-experiment`
+- **Type**: Experiment
+- **Variants**:
+  - `control` (30%): Standard pricing layout
+  - `promo_v1` (35%): Discount banner with promotional messaging
+  - `promo_v2` (35%): Emphasized yearly plan with "Best Value" badge
+- **Context Targeting**: Only enabled for specific countries (UK and US)
+- **Features**:
+  - Dynamic country selector to test different contexts
+  - User simulation to see different variant assignments
+  - Real-time variant display in configuration panel
+
+
+## Feature Flags Summary
+
+| Flag Name | Type | Backend | Frontend | Description |
+|-----------|------|---------|----------|-------------|
+| `dark-mode` | Release | - | ✓ | Theme toggle (UI-only) |
+| `disable-slow-reports` | Kill Switch | ✓ | ✓ | Emergency circuit breaker for slow operations |
+| `movie-recommendations` | Experiment | ✓ | ✓ | Compare recommendation algorithms |
+| `pricing-experiment` | Experiment | - | ✓ | A/B test with 3 variants + context targeting |
+
 
 ## Project Structure
 

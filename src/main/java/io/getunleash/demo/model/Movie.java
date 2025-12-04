@@ -8,11 +8,13 @@ public class Movie {
     private String title;
     private String year;
     private String rating;
+    private String imageUrl;
 
-    public Movie(String title, String year, String rating) {
+    public Movie(String title, String year, String rating, String imageUrl) {
         this.title = title;
         this.year = year;
         this.rating = rating;
+        this.imageUrl = imageUrl;
     }
 
     // Getters and setters
@@ -38,5 +40,13 @@ public class Movie {
 
     public void setRating(String rating) {
         this.rating = rating;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

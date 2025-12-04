@@ -7,6 +7,7 @@ interface Movie {
   title: string;
   year: string;
   rating: string;
+  imageUrl: string;
 }
 
 @Component({
@@ -28,64 +29,70 @@ interface Movie {
         <!-- Best Practices Content -->
         <div class="bg-white dark:bg-gray-800 p-6 mb-6 rounded-lg shadow-xl border-t-4 border-unleash dark:border-blue-500 transition-colors">
           <h2 class="text-2xl text-unleash dark:text-blue-400 mb-4 font-bold transition-colors">
-            11 Best Practices for Using Unleash Feature Flags
+            11 Principles for Building Large-Scale Feature Flag Systems
           </h2>
           
           <div class="space-y-4 text-gray-700 dark:text-gray-300 text-sm transition-colors">
             <div>
-              <h3 class="text-base font-semibold text-unleash dark:text-blue-400 mb-1 transition-colors">1. Use Descriptive Flag Names</h3>
-              <p>Choose clear, self-explanatory names that describe what the flag controls. Use kebab-case for consistency (e.g., "new-checkout-flow").</p>
+              <h3 class="text-base font-semibold text-unleash dark:text-blue-400 mb-1 transition-colors">1. Enable Runtime Control</h3>
+              <p>A scalable feature management system evaluates flags at runtime, not at build time. If you need to restart your application to turn on a flag, that's configuration, not a feature flag.</p>
             </div>
 
             <div>
-              <h3 class="text-base font-semibold text-unleash dark:text-blue-400 mb-1 transition-colors">2. Choose the Right Flag Type</h3>
-              <p>Select the appropriate flag type: release toggles for gradual rollouts, experiment toggles for A/B tests, operational toggles for system behavior, permission toggles for access control, and kill switches for emergency shutdowns.</p>
+              <h3 class="text-base font-semibold text-unleash dark:text-blue-400 mb-1 transition-colors">2. Make Flags Short-Lived</h3>
+              <p>Feature flags should be temporary. Once a rollout is complete, remove the flag from your code and archive it. Treat flags like technical debt and set expiration dates.</p>
             </div>
 
             <div>
-              <h3 class="text-base font-semibold text-unleash dark:text-blue-400 mb-1 transition-colors">3. Plan for Flag Removal</h3>
-              <p>Feature flags are temporary by design. Set a removal date when creating a flag and actively clean up old flags to prevent technical debt.</p>
+              <h3 class="text-base font-semibold text-unleash dark:text-blue-400 mb-1 transition-colors">3. Prioritize Availability Over Consistency</h3>
+              <p>Your application shouldn't depend on the availability of your feature flag system. SDKs should work with locally cached data, ensuring uninterrupted functionality even when the network is down.</p>
             </div>
 
             <div>
-              <h3 class="text-base font-semibold text-unleash dark:text-blue-400 mb-1 transition-colors">4. Use Gradual Rollouts</h3>
-              <p>Start with a small percentage of users and gradually increase. This minimizes risk and allows you to catch issues early before they affect your entire user base.</p>
+              <h3 class="text-base font-semibold text-unleash dark:text-blue-400 mb-1 transition-colors">4. Ensure Unique Flag Names</h3>
+              <p>All flags within the same control service should have unique names across your entire system. This prevents conflicts, simplifies management, and improves collaboration across teams.</p>
             </div>
 
             <div>
-              <h3 class="text-base font-semibold text-unleash dark:text-blue-400 mb-1 transition-colors">5. Leverage Variants for A/B Testing</h3>
-              <p>Use variants to test different versions of a feature simultaneously. This enables data-driven decisions about which implementation performs best.</p>
+              <h3 class="text-base font-semibold text-unleash dark:text-blue-400 mb-1 transition-colors">5. Choose Open by Default</h3>
+              <p>Make feature flag systems open by default to enable engineers, product owners, and support teams to collaborate effectively. Provide access to codebase, configuration, and analytics.</p>
             </div>
 
             <div>
-              <h3 class="text-base font-semibold text-unleash dark:text-blue-400 mb-1 transition-colors">6. Implement Kill Switches</h3>
-              <p>Add kill switches for risky or resource-intensive features. This allows you to instantly disable problematic features without redeploying.</p>
+              <h3 class="text-base font-semibold text-unleash dark:text-blue-400 mb-1 transition-colors">6. Protect PII by Evaluating Flags Server-Side</h3>
+              <p>Follow the principle of least privilege by evaluating flags server-side. Keep sensitive information like user IDs and email addresses confined to your application, not exposed to the client.</p>
             </div>
 
             <div>
-              <h3 class="text-base font-semibold text-unleash dark:text-blue-400 mb-1 transition-colors">7. Use Targeting Rules Wisely</h3>
-              <p>Target specific user segments, environments, or regions. This enables personalized experiences and safer testing in production.</p>
+              <h3 class="text-base font-semibold text-unleash dark:text-blue-400 mb-1 transition-colors">7. Evaluate Flags as Close to the User as Possible</h3>
+              <p>For optimal performance, evaluate feature flags locally. This reduces latency, enables offline functionality, lowers bandwidth costs, and improves resilience during service downtime.</p>
             </div>
 
             <div>
-              <h3 class="text-base font-semibold text-unleash dark:text-blue-400 mb-1 transition-colors">8. Monitor Flag Usage</h3>
-              <p>Track which flags are actively used, their rollout percentages, and their impact on system performance. Remove unused flags promptly.</p>
+              <h3 class="text-base font-semibold text-unleash dark:text-blue-400 mb-1 transition-colors">8. Scale Horizontally by Decoupling Reads and Writes</h3>
+              <p>Separate read and write operations into distinct APIs. This allows you to scale each component independently, provides better performance, and enables granular access control.</p>
             </div>
 
             <div>
-              <h3 class="text-base font-semibold text-unleash dark:text-blue-400 mb-1 transition-colors">9. Document Your Flags</h3>
-              <p>Add comprehensive descriptions explaining what each flag does, why it exists, and what conditions should trigger its removal.</p>
+              <h3 class="text-base font-semibold text-unleash dark:text-blue-400 mb-1 transition-colors">9. Limit Feature Flag Payload</h3>
+              <p>Keep payloads small to reduce network load, speed up flag evaluation, and improve memory efficiency. Use group identifiers instead of storing large user lists in flag configurations.</p>
             </div>
 
             <div>
-              <h3 class="text-base font-semibold text-unleash dark:text-blue-400 mb-1 transition-colors">10. Test Both States</h3>
-              <p>Ensure your application works correctly with the flag both enabled and disabled. Automate testing for both code paths to prevent regressions.</p>
+              <h3 class="text-base font-semibold text-unleash dark:text-blue-400 mb-1 transition-colors">10. Prioritize Consistent User Experience</h3>
+              <p>Ensure the same user consistently gets the same experience. Use user hashing, segmentation control, and robust monitoring to maintain consistency in percentage-based gradual rollouts.</p>
             </div>
 
             <div>
-              <h3 class="text-base font-semibold text-unleash dark:text-blue-400 mb-1 transition-colors">11. Integrate with Your Workflow</h3>
-              <p>Connect Unleash with your CI/CD pipeline, monitoring tools, and incident response processes for a seamless development experience.</p>
+              <h3 class="text-base font-semibold text-unleash dark:text-blue-400 mb-1 transition-colors">11. Optimize for Developer Experience</h3>
+              <p>Provide testable SDKs, visibility into flag behavior, effective monitoring, and comprehensive documentation. A positive developer experience enhances efficiency and contributes to overall success.</p>
             </div>
+          </div>
+
+          <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <p class="text-sm text-gray-600 dark:text-gray-400 transition-colors">
+              Learn more: <a href="https://docs.getunleash.io/guides/feature-flag-best-practices" target="_blank" rel="noopener noreferrer" class="text-unleash dark:text-blue-400 hover:underline font-semibold">Feature Flag Best Practices</a>
+            </p>
           </div>
         </div>
 
@@ -96,23 +103,35 @@ interface Movie {
               🎬 Recommended Movies For You
             </h2>
             
-            <!-- Horizontal Movie List -->
-            <div class="flex gap-4 overflow-x-auto pb-3">
+            <!-- Horizontal Movie List with top padding for hover expansion -->
+            <div class="flex gap-4 overflow-x-auto pb-3 pt-3">
               @for (movie of movies(); track movie.title) {
                 <button 
                   (click)="onMovieClick(movie)"
-                  class="flex-shrink-0 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden transition-all hover:scale-105 hover:shadow-2xl cursor-pointer border-2 border-transparent hover:border-unleash dark:hover:border-blue-500 text-left">
-                  <div class="bg-gradient-to-br from-gray-700 to-gray-900 h-[150px] flex items-center justify-center">
-                    <span class="text-5xl">🎬</span>
-                  </div>
-                  <div class="p-3">
-                    <h3 class="text-base font-bold text-gray-900 dark:text-white mb-0.5 transition-colors">{{ movie.title }}</h3>
-                    <p class="text-xs text-gray-600 dark:text-gray-400 mb-1.5 transition-colors">{{ movie.year }}</p>
+                  class="group flex-shrink-0 w-56 h-[380px] rounded-lg shadow-lg transition-all hover:scale-105 hover:shadow-2xl cursor-pointer border-2 border-transparent hover:border-white dark:hover:border-blue-400 text-left relative overflow-hidden">
+                  <!-- Movie Poster Background -->
+                  <img 
+                    [src]="movie.imageUrl" 
+                    [alt]="movie.title"
+                    class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                    loading="lazy"
+                  />
+                  
+                  <!-- Gradient Overlay - darkens from top to bottom -->
+                  <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-90"></div>
+                  
+                  <!-- Movie Info Overlay - positioned at bottom -->
+                  <div class="absolute bottom-0 left-0 right-0 p-4 z-10">
+                    <h3 class="text-base font-bold text-white mb-1 drop-shadow-lg line-clamp-2">{{ movie.title }}</h3>
+                    <p class="text-xs text-gray-200 mb-2 drop-shadow-md">{{ movie.year }}</p>
                     <div class="flex items-center gap-1">
-                      <span class="text-yellow-500 text-sm">⭐</span>
-                      <span class="text-xs font-semibold text-gray-700 dark:text-gray-300 transition-colors">{{ movie.rating }}</span>
+                      <span class="text-yellow-400 text-sm drop-shadow-md">⭐</span>
+                      <span class="text-sm font-semibold text-white drop-shadow-md">{{ movie.rating }}</span>
                     </div>
                   </div>
+                  
+                  <!-- Shine effect on hover -->
+                  <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
                 </button>
               }
             </div>

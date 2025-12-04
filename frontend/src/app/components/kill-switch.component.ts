@@ -22,7 +22,7 @@ import { UnleashService } from '../services/unleash.service';
       <!-- Reports Feature Section -->
       <div class="bg-white dark:bg-gray-800 p-6 mb-6 rounded-lg shadow-xl border-t-4 border-unleash dark:border-blue-500 transition-colors">
         <h2 class="text-xl text-unleash dark:text-blue-400 mb-3 font-semibold transition-colors">
-          📊 Reports Feature
+          Reports Feature
           </h2>
           <p class="text-gray-600 dark:text-gray-300 text-sm mb-4 transition-colors">
             This feature simulates a slow, resource-intensive operation that takes 5 seconds to complete.
@@ -66,7 +66,7 @@ import { UnleashService } from '../services/unleash.service';
               @if (reportResult()) {
                 <div class="bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 p-3 rounded transition-colors">
                   <p class="text-green-800 dark:text-green-300 text-sm m-0 transition-colors">
-                    <strong>Report Generated Successfully!</strong><br>
+                    <strong>Report Generated Successfully</strong><br>
                     The answer is: <span class="font-mono text-lg">{{ reportResult() }}</span>
                   </p>
                 </div>

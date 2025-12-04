@@ -288,13 +288,13 @@ import { UnleashService } from '../services/unleash.service';
             <div class="flex items-center gap-3">
               <div class="flex items-center gap-2">
                 <span class="text-xs text-gray-600 dark:text-gray-400 transition-colors">Status:</span>
-                @if (currentVariant() !== 'control') {
+                @if (experimentEnabled()) {
                   <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
                     ✓ Active ({{ currentVariant() }})
                   </span>
                 } @else {
                   <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
-                    ✗ Inactive (control)
+                    ✗ Inactive
                   </span>
                 }
               </div>

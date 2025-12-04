@@ -24,7 +24,27 @@ git clone https://github.com/Unleash/demo-java-angular.git
 cd demo
 ```
 
-### 2. Configure Backend (Spring Boot)
+### 2. Import Feature Flags into Unleash (Recommended)
+
+This repository includes an `unleash-export.json` file with all feature flags pre-configured. This is the quickest way to set up your Unleash instance with all the flags, strategies, variants, and constraints needed for this demo.
+
+**To import the configuration:**
+
+1. Log in to your Unleash instance
+2. Create a new project or select an existing one
+3. Go to **Project Settings** → **Import/Export**
+4. Click **Import** and select the `unleash-export.json` file from this repository
+5. Review the import preview and confirm
+
+**What gets imported:**
+- 4 feature flags: `dark-mode`, `disable-slow-reports`, `movie-recommendations`, `pricing-experiment`
+- All variants (control, promo_v1, promo_v2, v1-simple, v2-ml)
+- Rollout strategies and constraints (including country-based targeting)
+- Context field definitions
+
+> **Alternative**: You can manually create these flags in Unleash, but importing saves time and ensures the exact configuration matches the demo application.
+
+### 3. Configure Backend (Spring Boot)
 
 Create the configuration file from the template:
 
@@ -41,11 +61,11 @@ unleash.api.token=YOUR_UNLEASH_API_TOKEN_HERE
 ```
 
 **Where to find your token:**
-1. Log in to [Unleash](https://app.unleash-hosted.com/)
+1. Log in to Unleash
 2. Go to Settings → API Access
 3. Create or copy an API token with appropriate permissions
 
-### 3. Configure Frontend (Angular)
+### 4. Configure Frontend (Angular)
 
 Create the configuration file from the template:
 
@@ -62,11 +82,11 @@ Edit `unleash.config.ts` and configure your Unleash frontend key and instance UR
 ```
 
 **Where to find your frontend token:**
-1. Log in to [Unleash](https://app.unleash-hosted.com/)
+1. Log in to Unleash
 2. Go to Settings → API Access
 3. Create or copy a Frontend API token
 
-### 4. Install Frontend Dependencies
+### 5. Install Frontend Dependencies
 
 ```bash
 cd frontend

@@ -5,12 +5,14 @@ package io.getunleash.demo.model;
  * In a real application, this would be a JPA entity mapped to a database table.
  */
 public class Movie {
+    private String id;
     private String title;
     private String year;
     private String rating;
     private String imageUrl;
 
-    public Movie(String title, String year, String rating, String imageUrl) {
+    public Movie(String id, String title, String year, String rating, String imageUrl) {
+        this.id = id;
         this.title = title;
         this.year = year;
         this.rating = rating;
@@ -18,6 +20,14 @@ public class Movie {
     }
 
     // Getters and setters
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getTitle() {
         return title;
     }

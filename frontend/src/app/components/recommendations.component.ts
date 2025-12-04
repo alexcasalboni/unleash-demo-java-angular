@@ -4,6 +4,7 @@ import { ApiService } from '../services/api.service';
 import { UnleashService } from '../services/unleash.service';
 
 interface Movie {
+  id: string;
   title: string;
   year: string;
   rating: string;
@@ -98,17 +99,24 @@ interface Movie {
 
         <!-- Movie Recommendations (injected when flag is enabled) -->
         @if (recommendationsEnabled() && movies().length > 0) {
-          <div class="bg-gradient-to-r from-purple-500 to-pink-500 dark:from-purple-700 dark:to-pink-700 p-6 mb-6 rounded-lg shadow-xl transition-colors">
-            <h2 class="text-2xl text-white mb-4 font-bold">
-              🎬 Recommended Movies For You
-            </h2>
+          <div class="bg-white dark:bg-gray-800 p-6 mb-6 rounded-lg shadow-xl border-t-4 border-unleash dark:border-blue-500 transition-colors">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-2xl text-unleash dark:text-blue-400 font-bold transition-colors">
+                Recommended Movies For You
+              </h2>
+              @if (algorithm()) {
+                <span class="text-xs px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 font-semibold transition-colors">
+                  {{ algorithm() === 'v2-ml' ? 'ML Algorithm' : 'Simple Algorithm' }}
+                </span>
+              }
+            </div>
             
             <!-- Horizontal Movie List with top padding for hover expansion -->
-            <div class="flex gap-4 overflow-x-auto pb-3 pt-3">
-              @for (movie of movies(); track movie.title) {
+            <div class="flex gap-4 overflow-x-auto pb-3 pt-3 -mx-2 px-2">
+              @for (movie of movies(); track movie.id) {
                 <button 
                   (click)="onMovieClick(movie)"
-                  class="group flex-shrink-0 w-56 h-[380px] rounded-lg shadow-lg transition-all hover:scale-105 hover:shadow-2xl cursor-pointer border-2 border-transparent hover:border-white dark:hover:border-blue-400 text-left relative overflow-hidden">
+                  class="group flex-shrink-0 w-56 h-[380px] rounded-lg shadow-lg transition-all hover:scale-105 hover:shadow-2xl cursor-pointer border-2 border-transparent hover:border-unleash dark:hover:border-blue-400 text-left relative overflow-hidden">
                   <!-- Movie Poster Background -->
                   <img 
                     [src]="movie.imageUrl" 
@@ -135,12 +143,6 @@ interface Movie {
                 </button>
               }
             </div>
-
-            @if (algorithm()) {
-              <p class="text-white text-xs mt-3 opacity-75">
-                <em>Powered by {{ algorithm() === 'v2-ml' ? 'ML-based' : 'Simple' }} recommendation algorithm ({{ algorithm() }})</em>
-              </p>
-            }
           </div>
         }
       </div>
@@ -328,7 +330,7 @@ export class RecommendationsComponent implements OnInit {
   onMovieClick(movie: Movie) {
     // TODO: integrate the new Impact Metrics to track experiment performance
     
-    console.log(`🎬 User clicked on: ${movie.title} (${movie.year}) - Algorithm: ${this.algorithm()}`);
+    console.log(`🎬 User clicked on: ${movie.title} (${movie.year}) [ID: ${movie.id}] - Algorithm: ${this.algorithm()}`);
   }
 
   async simulateNewUser() {

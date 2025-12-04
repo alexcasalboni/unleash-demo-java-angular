@@ -12,7 +12,7 @@ A full-stack demonstration application showcasing [Unleash](https://www.getunlea
 ## Prerequisites
 
 - Java 21 or higher
-- Node.js 18+ and npm
+- Node.js 22.12+
 - An Unleash account/instance
 
 ## Setup Instructions
@@ -21,26 +21,28 @@ A full-stack demonstration application showcasing [Unleash](https://www.getunlea
 
 ```bash
 git clone https://github.com/Unleash/demo-java-angular.git
-cd demo
+cd demo-java-angular
 ```
 
 ### 2. Import Feature Flags into Unleash (Recommended)
 
-This repository includes an `unleash-export.json` file with all feature flags pre-configured. This is the quickest way to set up your Unleash instance with all the flags, strategies, variants, and constraints needed for this demo.
+This repository includes an `unleash-export.json` file with all feature flags preconfigured. This is the quickest way to set up your Unleash instance with all the flags, strategies, variants, and constraints needed for this demo.
 
 **To import the configuration:**
 
 1. Log in to your Unleash instance
-2. Create a new project or select an existing one
-3. Go to **Project Settings** → **Import/Export**
-4. Click **Import** and select the `unleash-export.json` file from this repository
-5. Review the import preview and confirm
+2. Go to **Configure > Context fields**. Create or edit the context field `country` and add the legal values `US`, `UK`, `AUS`, and `IN`. Click **Save**.
+3. Create a new project or select an existing one.
+4. Go to **Project Overview** and click **Import**.
+5. Select the `unleash-export.json` file from this repository and your target environment to import the flags to.
+6. Validate the import and confirm.
+
+If you encounter any issues, check out our [Import/Export docs](https://docs.getunleash.io/concepts/import-export).
 
 **What gets imported:**
 - 4 feature flags: `dark-mode`, `disable-slow-reports`, `movie-recommendations`, `pricing-experiment`
 - All variants (control, promo_v1, promo_v2, v1-simple, v2-ml)
 - Rollout strategies and constraints (including country-based targeting)
-- Context field definitions
 
 > **Alternative**: You can manually create these flags in Unleash, but importing saves time and ensures the exact configuration matches the demo application.
 
@@ -61,9 +63,19 @@ unleash.api.token=YOUR_UNLEASH_API_TOKEN_HERE
 ```
 
 **Where to find your token:**
-1. Log in to Unleash
-2. Go to Settings → API Access
-3. Create or copy an API token with appropriate permissions
+1. Log in to Unleash.
+2. Go to **Admin settings > API Access**.
+3. Create or copy a Backend API token. The token should have access to the environment where you created or imported your feature flag configurations.
+
+Note: This project is configured for **Java 21** by default. If you have a higher Java version installed, you need to update the `build.gradle` file:
+
+```gradle
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)  // Change 21 to your version
+    }
+}
+```
 
 ### 4. Configure Frontend (Angular)
 
@@ -82,9 +94,9 @@ Edit `unleash.config.ts` and configure your Unleash frontend key and instance UR
 ```
 
 **Where to find your frontend token:**
-1. Log in to Unleash
-2. Go to Settings → API Access
-3. Create or copy a Frontend API token
+1. Log in to Unleash.
+2. Go to **Admin settings > Access control > API access**.
+3. Create or copy a Frontend API token. The token should have access to the environment where you created or imported your feature flag configurations.
 
 ### 5. Install Frontend Dependencies
 
@@ -109,9 +121,10 @@ Or use your IDE's debug/run configuration. The backend will start on **http://lo
 
 ### Start the Frontend Development Server
 
-In a separate terminal, from the `frontend` directory:
+In a separate terminal:
 
 ```bash
+cd frontend
 npm start
 ```
 

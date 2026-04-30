@@ -126,7 +126,6 @@ A/B testing with three variants and context-based targeting.
 
 | Flag Name | Type | Backend | Frontend | Description |
 |-----------|------|---------|----------|-------------|
-| `dark-mode` | Release | - | ✓ | Theme toggle (UI-only) |
 | `disable-slow-reports` | Kill Switch | ✓ | ✓ | Emergency circuit breaker for slow operations |
 | `movie-recommendations` | Experiment | ✓ | ✓ | Compare recommendation algorithms |
 | `pricing-experiment` | Experiment | - | ✓ | A/B test with 3 variants + context targeting |

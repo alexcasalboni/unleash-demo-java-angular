@@ -1,8 +1,7 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { DarkModeService } from '../services/dark-mode.service';
-import { UnleashService } from '../services/unleash.service';
 
 @Component({
   selector: 'app-navigation',
@@ -41,55 +40,24 @@ import { UnleashService } from '../services/unleash.service';
           </div>
         </div>
         
-        <!-- Dark Mode Toggle (shown when feature flag is enabled) -->
-        @if (darkModeFeatureEnabled()) {
-          <div class="flex items-center gap-2">
-            <span class="text-xs text-white/70">☀️</span>
-            <button
-              (click)="darkModeService.toggle()"
-              [class]="'relative inline-flex h-5 w-9 items-center rounded-full transition-colors ' + (darkModeService.isDarkMode() ? 'bg-blue-600' : 'bg-gray-300')"
-              type="button">
-              <span
-                [class]="'inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform ' + (darkModeService.isDarkMode() ? 'translate-x-5' : 'translate-x-0.5')">
-              </span>
-            </button>
-            <span class="text-xs text-white/70">🌙</span>
-          </div>
-        }
+        <!-- Dark Mode Toggle -->
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-white/70">☀️</span>
+          <button
+            (click)="darkModeService.toggle()"
+            [class]="'relative inline-flex h-5 w-9 items-center rounded-full transition-colors ' + (darkModeService.isDarkMode() ? 'bg-blue-600' : 'bg-gray-300')"
+            type="button">
+            <span
+              [class]="'inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform ' + (darkModeService.isDarkMode() ? 'translate-x-5' : 'translate-x-0.5')">
+            </span>
+          </button>
+          <span class="text-xs text-white/70">🌙</span>
+        </div>
       </div>
     </nav>
   `,
   standalone: true
 })
-export class NavigationComponent implements OnInit {
-  darkModeFeatureEnabled = signal(false);
-  
-  constructor(
-    public darkModeService: DarkModeService,
-    private unleashService: UnleashService
-  ) {}
-
-  async ngOnInit(): Promise<void> {
-    await this.unleashService.initialize();
-    
-    // Check if dark-mode feature flag is enabled
-    const isDarkModeEnabled = this.unleashService.isEnabled('dark-mode');
-    this.darkModeFeatureEnabled.set(isDarkModeEnabled);
-    
-    // If feature flag is disabled, force light mode
-    if (!isDarkModeEnabled) {
-      this.darkModeService.disable();
-    }
-    
-    // Listen for feature flag updates
-    this.unleashService.onUpdate(() => {
-      const isEnabled = this.unleashService.isEnabled('dark-mode');
-      this.darkModeFeatureEnabled.set(isEnabled);
-      
-      // If feature flag is disabled, force light mode
-      if (!isEnabled) {
-        this.darkModeService.disable();
-      }
-    });
-  }
+export class NavigationComponent {
+  constructor(public darkModeService: DarkModeService) {}
 }

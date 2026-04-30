@@ -14,7 +14,7 @@ import { UnleashService } from '../services/unleash.service';
           Unleash Demo (UI-only)
         </h1>
         <p class="text-gray-600 dark:text-gray-300 text-base transition-colors">
-          Show a light/dark mode toggle based on a frontend-only feature flag.
+          Toggle between light and dark mode using the navigation bar switch.
         </p>
       </div>
 
@@ -24,8 +24,7 @@ import { UnleashService } from '../services/unleash.service';
           About UI-only Feature Flags
         </h2>
         <p class="text-gray-600 dark:text-gray-300 text-sm transition-colors">
-          This page demonstrates a UI-only feature flag. The dark mode toggle in the navigation bar is controlled by the "dark-mode" feature flag. 
-          When the flag is enabled, users can see and use the dark mode toggle. When disabled, the toggle is hidden.
+          This page demonstrates UI-only feature flags. The dark mode toggle in the navigation bar is a permanent feature that lets users switch between light and dark themes.
         </p>
       </div>
     </div>
@@ -43,18 +42,6 @@ import { UnleashService } from '../services/unleash.service';
               Feature Flags Configuration
             </h3>
             <div class="flex items-center gap-3">
-              <div class="flex items-center gap-2">
-                <span class="text-xs text-gray-600 dark:text-gray-400 transition-colors">Status:</span>
-                @if (flagEnabled()) {
-                  <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-                    ✓ Active
-                  </span>
-                } @else {
-                  <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
-                    ✗ Inactive
-                  </span>
-                }
-              </div>
               @if (isPanelOpen()) {
                 <svg class="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
@@ -101,36 +88,6 @@ import { UnleashService } from '../services/unleash.service';
               </div>
             </div>
             
-            <table class="w-full border-collapse">
-              <thead>
-                <tr class="bg-unleash dark:bg-blue-600 text-white transition-colors">
-                  <th class="p-2.5 text-left text-sm font-semibold border-b-2 border-gray-200 w-1/4">Flag Name</th>
-                  <th class="p-2.5 text-left text-sm font-semibold border-b-2 border-gray-200 w-1/6">Type</th>
-                  <th class="p-2.5 text-left text-sm font-semibold border-b-2 border-gray-200">Description</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="border-b border-gray-200 dark:border-gray-700 transition-colors">
-                  <td class="p-2.5 text-sm text-gray-800 dark:text-gray-300 transition-colors">dark-mode</td>
-                  <td class="p-2.5 transition-colors">
-                    <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-                      release
-                    </span>
-                  </td>
-                  <td class="p-2.5 text-xs text-gray-800 dark:text-gray-300 transition-colors">
-                    Enables the dark mode toggle in the navigation bar. This is a UI-only feature flag that doesn't require backend changes - the frontend autonomously checks the flag and shows/hides the toggle accordingly.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            
-            <!-- Info Message
-            <div class="mt-4 p-4 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-500 rounded transition-colors">
-              <p class="text-blue-700 dark:text-blue-300 m-0 transition-colors">
-                <strong>💡 UI-only Feature Flag</strong> - The dark mode toggle is controlled by the "dark-mode" feature flag. Toggle it in Unleash to show/hide the dark mode switch in the navigation bar.
-              </p>
-            </div>
-            -->
           </div>
         </div>
       </div>
@@ -139,7 +96,6 @@ import { UnleashService } from '../services/unleash.service';
   standalone: true
 })
 export class UiOnlyComponent implements OnInit {
-  flagEnabled = signal<boolean>(false);
   currentUserId = signal<string>('');
   isPanelOpen = signal<boolean>(
     typeof localStorage !== 'undefined' && localStorage.getItem('featureFlagsPanelOpen') === 'true'
@@ -154,18 +110,8 @@ export class UiOnlyComponent implements OnInit {
     // Get current userId
     this.currentUserId.set(this.unleashService.getCurrentUserId());
     
-    this.checkFlag();
-    
-    this.unleashService.onUpdate(() => {
-      this.checkFlag();
-    });
-    
     // Mark as initialized after a brief delay to avoid FOUC
     setTimeout(() => this.isInitialized.set(true), 0);
-  }
-
-  checkFlag() {
-    this.flagEnabled.set(this.unleashService.isEnabled('dark-mode'));
   }
 
   togglePanel() {
@@ -178,6 +124,5 @@ export class UiOnlyComponent implements OnInit {
   async simulateNewUser() {
     await this.unleashService.simulateNewUser();
     this.currentUserId.set(this.unleashService.getCurrentUserId());
-    this.checkFlag();
   }
 }
